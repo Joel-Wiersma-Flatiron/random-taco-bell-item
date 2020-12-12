@@ -1,0 +1,3 @@
+class RandomTacoBellMenuItem::MenuItem
+
+end

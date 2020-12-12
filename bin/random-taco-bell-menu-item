@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/random_taco_bell_menu_item'
+
+RandomTacoBellMenuItem::CLI.new.greeting
