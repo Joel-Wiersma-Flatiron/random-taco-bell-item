@@ -21,7 +21,11 @@ class RandomMcdonaldsMenuItem::Scraper
 
   def menu_items(category)
     category.css("li.mcd-category-page__item")
-    #category.css("li.categories-list-item")
+  end
+
+  #Two different css selectors have to be used
+  def menu_items2(category)
+    category.css("li.categories-list-item")
   end
 
   def make_menu_items
@@ -31,6 +35,12 @@ class RandomMcdonaldsMenuItem::Scraper
           menu_item = RandomMcdonaldsMenuItem::MenuItem.new
           menu_item.name = item.css("span.mcd-category-page__item-name").text
           #project.css("div.project-thumbnail a img").attribute("src").value 
+        end
+      end
+      menu_items2(category).each do |item|
+        if item.css("span.categories-item-name").text != ""
+          menu_item = RandomMcdonaldsMenuItem::MenuItem.new
+          menu_item.name = item.css("span.categories-item-name").text
         end
       end
     end 

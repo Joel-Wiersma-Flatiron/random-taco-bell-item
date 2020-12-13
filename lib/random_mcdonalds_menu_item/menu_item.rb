@@ -8,6 +8,7 @@ class RandomMcdonaldsMenuItem::MenuItem
   end
   
   def self.all
+    @@all = @@all.uniq
     @@all
   end
   
