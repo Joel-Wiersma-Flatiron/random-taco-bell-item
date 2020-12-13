@@ -13,7 +13,6 @@ class RandomMcdonaldsMenuItem::Scraper
   def menu_categories
     i = 1
     while i < 11
-      #puts "https://www.mcdonalds.com#{get_page.css("a.category-link")[i]["href"]}"
       @categories << Nokogiri::HTML(open("https://www.mcdonalds.com#{get_page.css("a.category-link")[i]["href"]}"))
       i += 1
     end
@@ -31,24 +30,40 @@ class RandomMcdonaldsMenuItem::Scraper
   def make_menu_items
     @categories.each do |category|
       menu_items(category).each do |item|
-        if item.css("span.mcd-category-page__item-name").text != ""
+        if item.css("span.mcd-category-page__item-name").text != "" && duplicate?(item.css("span.categories-item-name").text)
           menu_item = RandomMcdonaldsMenuItem::MenuItem.new
           menu_item.name = item.css("span.mcd-category-page__item-name").text
-          #project.css("div.project-thumbnail a img").attribute("src").value 
         end
       end
       menu_items2(category).each do |item|
-        if item.css("span.categories-item-name").text != ""
+        simplified = item.css("span.categories-item-name").text
+        if simplified != "" && duplicate?(simplified) && simplified != "#""{itemName}"
           menu_item = RandomMcdonaldsMenuItem::MenuItem.new
-          menu_item.name = item.css("span.categories-item-name").text
+          menu_item.name = simplified
         end
       end
     end 
   end
 
-  def print_menu_items
+  def duplicate?(item)
+    RandomMcdonaldsMenuItem::MenuItem.all.each do |check|
+      return false if item == check.name
+    end
+    return true
+  end
+
+  def print_menu_items(items)
+    random_numbers = []
+    while random_numbers.length < items
+      random_numbers << (rand(RandomMcdonaldsMenuItem::MenuItem.all.length) - 1)
+      random_numbers.uniq
+    end
+    item_number = 0
     RandomMcdonaldsMenuItem::MenuItem.all.each do |item|
-      puts "Menu item: #{item.name}"
+      random_numbers.each do |number|
+        puts item.name if item_number == number
+      end
+      item_number += 1
     end
   end
 end

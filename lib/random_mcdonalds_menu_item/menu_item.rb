@@ -1,5 +1,5 @@
 class RandomMcdonaldsMenuItem::MenuItem
-  attr_accessor :name, :image
+  attr_accessor :name
     
   @@all = []
   
