@@ -10,6 +10,7 @@ class RandomMcdonaldsMenuItem::Scraper
     Nokogiri::HTML(open("https://www.mcdonalds.com/us/en-us/full-menu.html"))
   end
 
+  # Have to grab menu items from multiple pages(categories)
   def menu_categories
     i = 1
     while i < 11
@@ -45,6 +46,7 @@ class RandomMcdonaldsMenuItem::Scraper
     end 
   end
 
+  #Makes sure the item isn't already added before adding a new one
   def duplicate?(item)
     RandomMcdonaldsMenuItem::MenuItem.all.each do |check|
       return false if item == check.name
@@ -52,6 +54,7 @@ class RandomMcdonaldsMenuItem::Scraper
     return true
   end
 
+  #Prints the user entered amount of random menu items
   def print_menu_items(items)
     random_numbers = []
     while random_numbers.length < items
