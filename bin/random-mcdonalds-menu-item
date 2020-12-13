@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/random_mcdonalds_menu_item'
+
+RandomMcdonaldsMenuItem::CLI.new.greeting
+
+#run with -> ruby bin/random-mcdonalds-menu-item`
