@@ -35,8 +35,6 @@ class RandomMcdonaldsMenuItem::Scraper
           menu_item = RandomMcdonaldsMenuItem::MenuItem.new
           menu_item.name = item.css("span.mcd-category-page__item-name").text
         end
-      end
-      menu_items2(category).each do |item|
         simplified = item.css("span.categories-item-name").text
         if simplified != "" && duplicate?(simplified) && simplified != "#""{itemName}"
           menu_item = RandomMcdonaldsMenuItem::MenuItem.new
