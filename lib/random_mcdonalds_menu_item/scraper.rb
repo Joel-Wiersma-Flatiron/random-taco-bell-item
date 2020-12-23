@@ -1,7 +1,7 @@
 class RandomMcdonaldsMenuItem::Scraper
 
   attr_reader :categories
-
+  BASE_URL = "https://www.mcdonalds.com"
   def initialize
     @categories = []
   end
@@ -14,23 +14,27 @@ class RandomMcdonaldsMenuItem::Scraper
   def menu_categories
     i = 1
     while i < 11
-      @categories << Nokogiri::HTML(open("https://www.mcdonalds.com#{get_page.css("a.category-link")[i]["href"]}"))
+      category_url = BASE_URL+get_page.css("a.category-link")[i]["href"]
+      category_name = get_page.css("#category-section > ul.mcd-category-page__links-section.mcd-category-page__left-nav--sub-category > li > a > span")[i].text
+      @categories << Category.new(category_name, category_url)
       i += 1
     end
   end
+  
 
   def menu_items(category)
-    category.css("li.mcd-category-page__item")
+    # binding.pry
+    Nokogiri::HTML(open(category)).css("li.mcd-category-page__item")
   end
 
   #Two different css selectors have to be used
   def menu_items2(category)
-    category.css("li.categories-list-item")
+    Nokogiri::HTML(open(category)).css("li.categories-list-item")
   end
 
   def make_menu_items
-    @categories.each do |category|
-      menu_items(category).each do |item|
+    categories.each do |category|
+      menu_items(category.url).each do |item|
         if item.css("span.mcd-category-page__item-name").text != "" && duplicate?(item.css("span.categories-item-name").text)
           menu_item = RandomMcdonaldsMenuItem::MenuItem.new
           menu_item.name = item.css("span.mcd-category-page__item-name").text
