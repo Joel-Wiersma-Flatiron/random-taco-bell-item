@@ -27,12 +27,12 @@ class RandomMcdonaldsMenuItem::MenuItem
   def self.print_menu_items(items)
     random_numbers = []
     while random_numbers.uniq.length < items
-      random_numbers << (rand(@@all.length) - 1)
-      random_numbers.uniq!
+      number = (rand(@@all.length))
+      random_numbers << number if !random_numbers.include?(number)
     end
     item_number = 0
     items_table = TTY::Table.new(header: ["Id", "Item Name"])
-    all.each.with_index(1) do |item,i |
+    all.each.with_index(1) do |item, i|
       random_numbers.each do |number|
         items_table << ["#{i}".red, "#{item.name}"] if item_number == number
         # puts item.name if item_number == number

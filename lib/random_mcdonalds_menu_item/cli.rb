@@ -1,17 +1,22 @@
 class RandomMcdonaldsMenuItem::CLI
 
+  attr_reader :scraper
+
+  def initialize
+    @scraper = RandomMcdonaldsMenuItem::Scraper.new
+  end
+
   def greeting
     puts "Welcome to the random McDonalds menu item generator"
     puts "Please wait 5 to 10 seconds for us to grab all the information"
-    scraper = RandomMcdonaldsMenuItem::Scraper.new
     scraper.menu_categories
     scraper.make_menu_items
     program
   end
 
   def valid?(input)
-    if input > 10 
-      puts "There's no way you can eat that much, enter a number 10 or less"
+    if input > RandomMcdonaldsMenuItem::MenuItem.all.length
+      puts "There are only #{RandomMcdonaldsMenuItem::MenuItem.all.length} things on the menu. Enter something equal to or below that"
       return false
     elsif input < 1
       puts "You should enter a valid number greater than or equal to 1"
@@ -30,10 +35,11 @@ class RandomMcdonaldsMenuItem::CLI
     end
     if valid?(input)
       RandomMcdonaldsMenuItem::MenuItem.print_menu_items(input)
-      puts "Would you like to try again? Enter number of items or 0 to stop"
+      puts "Enter an item's ID to get more info about it"
       input = gets.strip.to_i
-      input != 0 ? program(input) : exit
+      scraper.more_info(input)
+    else
+      program
     end
-    program
   end
 end
