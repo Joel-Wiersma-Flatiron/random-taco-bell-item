@@ -60,6 +60,12 @@ class RandomMcdonaldsMenuItem::Scraper
 
   def more_info(id)
     item = which_item(id)
-    binding.pry
+    category_url = Nokogiri::HTML(open(item[0].url))
+    if category_url.css("a.mcd-category-page__item-link") == category_url.css("blank")
+      item_url = Nokogiri::HTML(open(BASE_URL+category_url.css("a.categories-item-link")[item[1] - 1]["href"]))
+    else
+      item_url = Nokogiri::HTML(open(BASE_URL+category_url.css("a.mcd-category-page__item-link")[item[1] - 1]["href"]))
+    end
+    puts item_url.css("p.product-detail__description").text
   end
 end

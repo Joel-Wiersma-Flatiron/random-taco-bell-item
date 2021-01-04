@@ -28,18 +28,39 @@ class RandomMcdonaldsMenuItem::CLI
     return true
   end
 
-  def program(input = nil)
-    if input == nil
-      puts "How many items from McDonald's would you like?"
-      input = gets.strip.to_i
-    end
+  def program
+    puts "How many items from McDonald's would you like?"
+    input = gets.strip.to_i
     if valid?(input)
       RandomMcdonaldsMenuItem::MenuItem.print_menu_items(input)
-      puts "Enter an item's ID to get more info about it"
-      input = gets.strip.to_i
-      scraper.more_info(input)
+      get_info
+      puts "Would you like to generate more random items? (Y/N)"
+      input = gets.strip.downcase
+      if input == "y"
+        program
+      elsif input == "n"
+        exit
+      else 
+        puts "I don't understand that response (assuming yes)"
+        program
+      end
     else
       program
+    end
+  end
+
+  def get_info
+    puts "Enter an item's ID to get more info about it"
+    input = gets.strip.to_i
+    scraper.more_info(input)
+    puts "Would you like to get more info on another item? (Y/N)"
+    input = gets.strip.downcase
+    if input == "y"
+      get_info
+    elsif input == "n"
+    else 
+      puts "I don't understand that response (assuming yes)"
+      get_info
     end
   end
 end

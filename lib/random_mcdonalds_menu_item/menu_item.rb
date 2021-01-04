@@ -1,5 +1,5 @@
 class RandomMcdonaldsMenuItem::MenuItem
-  attr_accessor :name, :category
+  attr_accessor :name, :category, :description
     
   @@all = []
   
@@ -13,14 +13,6 @@ class RandomMcdonaldsMenuItem::MenuItem
   
   def self.reset_all
     all.clear
-  end
-
-  def self.display_grid_of_books(books)
-    books_table = TTY::Table.new(header: ["Id", "Book Title"])
-    books.each.with_index(1) do |book, i| 
-        books_table << ["#{i}".red, "#{book.title}"]
-    end
-    puts books_table.render(:unicode)
   end
 
   #Prints the user entered amount of random menu items
